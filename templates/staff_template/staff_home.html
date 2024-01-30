@@ -1,0 +1,340 @@
+{% extends 'staff_template/base_template.html' %}
+{% block page_title %}
+Home
+{% endblock page_title %}
+{% load static %}
+{% block main_content %}
+<section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg col col-md">
+          <!-- small box -->
+          <div class="small-box bg-info">
+            <div class="inner">
+              <h3>{{student_count}}</h3>
+
+              <p>Total Student Under Me</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-user-friends"></i>
+            </div>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg col col-md">
+          <!-- small box -->
+          <div class="small-box bg-success">
+            <div class="inner">
+              <h3>{{attendance_count}}</h3>
+
+              <p>Total Attendance Taken</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-calendar-alt"></i>
+            </div>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg col col-md">
+          <!-- small box -->
+          <div class="small-box bg-warning">
+            <div class="inner">
+              <h3>{{leave_count}}</h3>
+
+              <p>Total Leave Taken</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg col col-md">
+          <!-- small box -->
+          <div class="small-box bg-secondary">
+            <div class="inner">
+              <h3>{{subjects_count}}</h3>
+
+              <p>Total Subjects</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-book-open"></i>
+            </div>
+          </div>
+        </div> 
+        <div class="col-lg col col-md">
+          <!-- small box -->
+          {% if staff_notification > 0 %}
+            <a href="{% url 'view_notification' %}" style="color: white;">
+              <div class="small-box bg-danger">
+                <div class="inner">
+                  <h3>{{staff_notification}}</h3>
+                  <p>Notifications</p>
+                </div>
+                <div class="icon">
+                  <i class="fas fas fa-bell"></i>
+                </div>
+              </div>
+            </a>
+          {% else %}
+            <div class="small-box bg-success">
+              <div class="inner">
+                <h3>0</h3>
+
+                <p>No Notifications</p>
+              </div>
+              <div class="icon">
+                <i class="fas fas fa-bell"></i>
+              </div>
+            </div>
+          {% endif %}
+          
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="card card-danger">
+            <div class="card-header">
+              <h3 class="card-title">Attendance Vs Leave Chart</h3>
+  
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card card-success">
+            <div class="card-header">
+              <h3 class="card-title">Attend Per Subject</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart">
+                <canvas id="stackedBarChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+              </div>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+
+        </div>
+        <div class="col-lg-12">
+          <div class="card card-info">
+            <div class="card-header">
+              <h3 class="card-title">Student Attend Status</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart">
+                <canvas id="stackedBarChart2" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+              </div>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+
+        </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+{% endblock main_content %}
+
+{% block custom_js %}
+    <script>
+      $(document).ready(function(){
+
+
+        var subject_listt = {{ subject_list|safe }};
+        var attendance_listt = {{ attendance_list }};
+        var student_list = {{ student_list|safe }};
+        var student_list_attendance_present = {{ student_list_attendance_present }};
+        var student_list_attendance_absent = {{ student_list_attendance_absent }};
+
+        var pieData = {
+          labels: [
+              'ATTEND',
+              'LEAVE',
+              'TOTAL DAYS',
+          ],
+          datasets: [
+            {
+              data: [{{attendance_count}},{{leave_count}},{{attendance_count_total}}],
+              backgroundColor : ['#008080','#FF5733','#3b8bba'],
+            }
+          ]
+        };
+
+
+        var stackedBarChartData = $('#stackedBarChart').get(0).getContext('2d')
+
+        var stackedBarChartData = {
+          labels  : subject_listt,
+          datasets: [
+            {
+              label               : 'Attend Subject',
+              backgroundColor     : 'rgba(60,141,188,0.9)',
+              borderColor         : 'rgba(60,141,188,0.8)',
+              pointRadius          : false,
+              pointColor          : '#3b8bba',
+              pointStrokeColor    : 'rgba(60,141,188,1)',
+              pointHighlightFill  : '#fff',
+              pointHighlightStroke: 'rgba(60,141,188,1)',
+              data                : attendance_listt
+            },
+            
+          ]
+        }
+
+        var stackedBarChartOptions = {
+          maintainAspectRatio : false,
+          responsive : true,
+          legend: {
+            display: false
+          },
+          scales: {
+            xAxes: [{
+              gridLines : {
+                display : false,
+              }
+            }],
+            yAxes: [{
+              gridLines : {
+                display : false,
+              }
+            }]
+          }
+        }
+        //STUDENT ATTENDANCE 
+        var stackedBarChartData2 = $('#stackedBarChart2').get(0).getContext('2d')
+
+        var stackedBarChartData2 = {
+          labels  : student_list,
+          datasets: [
+            {
+              label               : 'Present',
+              backgroundColor     : 'rgb(0, 128, 128)',
+              borderColor         : 'rgba(60,141,188,0.8)',
+              pointRadius          : false,
+              pointColor          : '#3b8bba',
+              pointStrokeColor    : 'rgba(60,141,188,1)',
+              pointHighlightFill  : '#fff',
+              pointHighlightStroke: 'rgba(60,141,188,1)',
+              data                : student_list_attendance_present,
+            },
+            {
+              label               : 'Absent',
+              backgroundColor     : 'rgb(192, 192, 192)',
+              borderColor         : 'rgba(210, 214, 222, 1)',
+              pointRadius         : false,
+              pointColor          : 'rgba(210, 214, 222, 1)',
+              pointStrokeColor    : '#c1c7d1',
+              pointHighlightFill  : '#fff',
+              pointHighlightStroke: 'rgba(220,220,220,1)',
+              data                : student_list_attendance_absent,
+            },
+          ]
+        }
+
+        var stackedBarChartOptions2 = {
+          maintainAspectRatio : false,
+          responsive : true,
+          legend: {
+            display: false
+          },
+          scales: {
+            xAxes: [{
+              gridLines : {
+                display : false,
+              }
+            }],
+            yAxes: [{
+              gridLines : {
+                display : false,
+              }
+            }]
+          }
+        }
+
+        var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+        var pieOptions     = {
+          maintainAspectRatio : false,
+          responsive : true,
+        }
+        new Chart(pieChartCanvas, {
+          type: 'pie',
+          data: pieData,
+          options: pieOptions
+        });
+
+
+        var stackedBarChartCanvas = $('#stackedBarChart').get(0).getContext('2d')
+
+        var stackedBarChartOptions = {
+            responsive              : true,
+            maintainAspectRatio     : false,
+            scales: {
+              xAxes: [{
+                stacked: true,
+              }],
+              yAxes: [{
+                stacked: true
+              }]
+            }
+          }
+
+          new Chart(stackedBarChartCanvas, {
+            type: 'bar',
+            data: stackedBarChartData,
+            options: stackedBarChartOptions
+          });
+
+          var stackedBarChartCanvas2 = $('#stackedBarChart2').get(0).getContext('2d')
+
+          var stackedBarChartOptions2 = {
+              responsive              : true,
+              maintainAspectRatio     : false,
+              scales: {
+                xAxes: [{
+                  stacked: true,
+                }],
+                yAxes: [{
+                  stacked: true
+                }]
+              }
+            }
+
+            new Chart(stackedBarChartCanvas2, {
+              type: 'bar',
+              data: stackedBarChartData2,
+              options: stackedBarChartOptions2
+            })
+      });
+    </script>
+{% endblock custom_js %}

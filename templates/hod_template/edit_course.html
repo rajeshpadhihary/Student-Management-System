@@ -1,0 +1,35 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+<h4>
+    Edit Course | Coursename : {{course.course_name}} | id : {{course.id}}
+</h4>
+{% endblock page_title %}
+{% load static %}
+{% block main_content %}
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Edit Course</h3>
+                    </div>
+                    <form action="{% url 'edit_course_save' %}" method="post">
+                        {% csrf_token %}
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Course Name</label>
+                                <input type="text" class="form-control" name="course_name" placeholder="Enter course" value="{{course.course_name}}">
+                                <input type="text" class="form-control" name="course_id" placeholder="Enter course" value="{{course.id}}" hidden>
+                            </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary btn-block">Save Course</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock main_content %}

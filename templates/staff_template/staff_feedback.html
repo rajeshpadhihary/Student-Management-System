@@ -1,0 +1,65 @@
+{% extends 'staff_template/base_template.html' %}
+{% block page_title %}
+Feedback Message
+{% endblock page_title %}
+{% load static %}
+{% block main_content %}
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Leave a Feedback Message</h3>
+                    </div>
+                    <form action="{% url 'staff_feedback_save' %}" method="post">
+                        {% csrf_token %}
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Feedback Message</label>
+                                <textarea name="feedback_message" class="form-control" rows="6"></textarea>
+                            </div>
+                            <div class="form-group">
+                                {% include 'messages.html' %}
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block" id="fetch_student">Send Feedback</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Feedback History</h3>
+                    </div>
+                    {% if feedback_message %}
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Feedback Message</th>
+                                <th>Feedback Reply</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            {% for feedback in feedback_message %}
+                            <tr>
+                                <td>{{feedback.id}}</td>
+                                <td>{{feedback.feedback}}</td>
+                                <td>{{feedback.feedback_reply}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <div class="alert alert-success alert-dismissible fade show container-fluid mt-4" role="alert">
+                        <center><strong>History Is Empty</strong></center>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock main_content %}

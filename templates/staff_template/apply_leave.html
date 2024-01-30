@@ -1,0 +1,83 @@
+{% extends 'staff_template/base_template.html' %}
+{% block page_title %}
+Leave Report And Apply For Leave
+{% endblock page_title %}
+{% load static %}
+{% block main_content %}
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Apply For Leave</h3>
+                    </div>
+                    <form action="{% url 'apply_leave_save' %}" method="post">
+                        {% csrf_token %}
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Leave Date</label>
+                                <input type="date" class="form-control" name="leave_date_start" value="" placeholder="Leave Date" />
+                            </div>
+                            <center>To</center>
+                            <div class="form-group">
+                                <input type="date" class="form-control" name="leave_date_end" value="" placeholder="Leave Date" />
+                            </div>
+                            <div class="form-group">
+                                <label>Leave Reason</label>
+                                <textarea name="leave_reason" class="form-control" rows="6"></textarea>
+                            </div>
+                            <div class="form-group">
+                                {% include 'messages.html' %}
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block" id="fetch_student">Apply For Leave</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Leave Apply History</h3>
+                    </div>
+                    {% if leave_data %}
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Leave Date</th>
+                                <th>Leave Message</th>
+                                <th>Leave Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            {% for leave in leave_data %}
+                            <tr>
+                                <td>{{leave.id}}</td>
+                                <td>{{leave.leave_date}}</td>
+                                <td>{{leave.leave_reason}}</td>
+                                <td>
+                                    {% if leave.leave_status == 1 %}
+                                        <span class="alert alert-success">Approved</span>
+                                    {% elif leave.leave_status == 2%}
+                                        <span class="alert alert-danger">Rejected</span>
+                                    {% else %}
+                                        <span class="alert alert-warning">Pending...</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <div class="alert alert-success alert-dismissible fade show container-fluid mt-4" role="alert">
+                        <center><strong>History Is Empty</strong></center>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock main_content %}

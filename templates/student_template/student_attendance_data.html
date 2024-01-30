@@ -1,0 +1,43 @@
+{% extends 'student_template/base_template.html' %}
+{% block page_title %}
+View Attendance
+{% endblock page_title %}
+{% load static %}
+{% block main_content %}
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">View Attendance</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            {% for attendance_report in attendance_reports %}
+                            {% if attendance_report.status == True %}
+                            <div class="card col-lg-3 col-6 rounded-pill bg-success border border-5">
+                                <center>
+                                    <h5 class="card-header"><b>{{attendance_report.attendance_id.attendance_date}}</b></h5>
+                                </center>
+                                <div class="card-body">
+                                    <h5 class="card-title"><b>You Are Present ...</b></h5>
+                                </div>
+                            </div>
+                            {% else %}
+                            <div class="card col-lg-3 col-6 rounded-pill bg-warning border border-5">
+                                <center>
+                                    <h5 class="card-header">{{attendance_report.attendance_id.attendance_date}}</h5>
+                                </center>
+                                <div class="card-body">
+                                    <h5 class="card-title"><b>You Are Absent !!!</b></h5>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+</section>
+{% endblock main_content %}

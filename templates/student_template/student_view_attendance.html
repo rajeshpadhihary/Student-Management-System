@@ -1,0 +1,52 @@
+{% extends 'student_template/base_template.html' %}
+{% block page_title %}
+View Attendance
+{% endblock page_title %}
+{% load static %}
+{% block main_content %}
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">View Attendance</h3>
+                    </div>
+                    <form action="{% url 'student_view_attendance_post' %}" method="post">
+                        {% csrf_token %}
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="form-group col-sm-12">
+                                    <label>Subject</label>
+                                    <select name="subject" id="subject" class="form-control">
+                                        {% for subject in subjects %}
+                                        <option value="{{subject.id}}">{{subject.subject_name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            
+                                <div class="form-group col-sm-6">
+                                    <label>Start Date</label>
+                                    <input type="date" name="start_date" class="form-control">
+                                </div>
+    
+                                <div class="form-group col-sm-6">
+                                    <label>End Date</label>
+                                    <input type="date" name="end_date" class="form-control">
+                                </div>
+    
+                                <!-- <div class="form-group">
+                                    {% include 'messages.html' %}
+                                </div> -->
+    
+                                <div class="card-footer col-sm-12">
+                                    <button type="submit" class="btn btn-primary btn-block" name="fetch_attendance">Fetch
+                                        Attendance</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+</section>
+{% endblock main_content %}

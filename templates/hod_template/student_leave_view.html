@@ -1,0 +1,61 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+Student Apply for Leave
+{% endblock page_title %}
+{% load static %}
+{% block main_content %}
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Student Apply for Leave</h3>
+                    </div>
+                    {% if leave_objs %}
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>student ID</th>
+                                <th>student Name</th>
+                                <th>Leave Date</th>
+                                <th>Leave Reason</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            {% for leave_obj in leave_objs %}
+                            <tr>
+                                <td>{{leave_obj.id}}</td>
+                                <td>{{leave_obj.student_id.id}}</td>
+                                <td>{{leave_obj.student_id.admin.first_name}}&nbsp;&nbsp;{{leave_obj.student_id.admin.last_name}}</td>
+                                <td>{{leave_obj.leave_date}}</td>
+                                <td>{{leave_obj.leave_reason}}</td>
+                                <td>
+                                    {% if leave_obj.leave_status == 0 %}
+                                        <a href="{% url 'student_leave_approve' leave_obj.id %}" class="btn btn-success">Approve</a>
+                                        <a href="{% url 'student_leave_reject' leave_obj.id %}" class="btn btn-danger">Reject</a>
+                                    {% elif leave_obj.leave_status == 1 %}
+                                        <button class="btn btn-warning" data-toggle = "modal" data-target = "#reply_modal">Approved</button>
+                                    {% else %}
+                                        <button class="btn btn-danger" data-toggle = "modal" data-target = "#reply_modal">Rejected</button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <div class="alert alert-success alert-dismissible fade show container-fluid mt-4" role="alert">
+                        <center><strong>History Is Empty</strong></center>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock main_content %}
+

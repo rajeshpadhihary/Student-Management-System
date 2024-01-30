@@ -1,0 +1,123 @@
+{% extends 'student_template/base_template.html' %}
+{% block page_title %}
+Results
+{% endblock page_title %}
+{% load static %}
+{% block main_content %}
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Results</h3>
+                    </div>
+                    <div class="container mt-3">
+                        {% include 'messages.html' %} 
+                    </div>
+                    {% if results %}
+                        <center><h3>No Results Found</h3></center>
+                    {% else %}
+                        {% if quaterly_exam_student_mark %}
+                        <div class="card-body table-responsive p-0">
+                            <center><h4><b>Quterly Exam Results</b></h4></center>
+                            <table class="table table-hover text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th>Subject Name</th>
+                                        <th>Mark Secure</th>
+                                        <th>Full Mark</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for quaterly_mark in quaterly_exam_student_mark %}
+                                    {% if quaterly_mark.obtained_marks < 40 %}
+                                    <tr style="background-color: rgb(255, 153, 153);">
+                                        <td>{{quaterly_mark.subject_id.subject_name}}</td>
+                                        <td>{{quaterly_mark.obtained_marks}} <span style="font-weight: lighter; margin-left: 20px; font-size: small;">You Are Fail</span></td>
+                                        <td>{{quaterly_mark.total_marks}}</td>
+                                    </tr> 
+                                    {% else %}
+                                    <tr style="background-color: rgb(153, 255, 153);">
+                                        <td>{{quaterly_mark.subject_id.subject_name}}</td>
+                                        <td>{{quaterly_mark.obtained_marks}}</td>
+                                        <td>{{quaterly_mark.total_marks}}</td>
+                                    </tr> 
+                                    {% endif %}                                  
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% endif %}
+                        <hr>
+                        {% if halfyerly_exam_student_mark %}
+                        <div class="card-body table-responsive p-0">
+                            <center><h4><b>Halfyearly Exam Results</b></h4></center>
+                            <table class="table table-hover text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th>Subject Name</th>
+                                        <th>Mark Secure</th>
+                                        <th>Full Mark</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for halfyearly_mark in halfyerly_exam_student_mark %}
+                                    {% if halfyearly_mark.obtained_marks < 40 %}
+                                    <tr style="background-color: rgb(255, 153, 153);">
+                                        <td>{{halfyearly_mark.subject_id.subject_name}}</td>
+                                        <td>{{halfyearly_mark.obtained_marks}} <span style="font-weight: lighter; margin-left: 20px; font-size: small;">You Are Fail</span></td>
+                                        <td>{{halfyearly_mark.total_marks}}</td>
+                                    </tr> 
+                                    {% else %}
+                                    <tr style="background-color: rgb(153, 255, 153);">
+                                        <td>{{halfyearly_mark.subject_id.subject_name}}</td>
+                                        <td>{{halfyearly_mark.obtained_marks}}</td>
+                                        <td>{{halfyearly_mark.total_marks}}</td>
+                                    </tr> 
+                                    {% endif %}                                  
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% endif %}
+                        <hr>
+                        {% if annual_exam_student_mark %}
+                        <div class="card-body table-responsive p-0">
+                            <center><h4><b>Annual Exam Results</b></h4></center>
+                            <table class="table table-hover text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th>Subject Name</th>
+                                        <th>Mark Secure</th>
+                                        <th>Full Mark</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for annual_mark in annual_exam_student_mark %}
+                                    {% if annual_mark.obtained_marks < 40 %}
+                                    <tr style="background-color: rgb(255, 153, 153);">
+                                        <td>{{annual_mark.subject_id.subject_name}}</td>
+                                        <td>{{annual_mark.obtained_marks}} <span style="font-weight: lighter; margin-left: 20px; font-size: small;">You Are Fail</span></td>
+                                        <td>{{annual_mark.total_marks}}</td>
+                                    </tr> 
+                                    {% else %}
+                                    <tr style="background-color: rgb(153, 255, 153);">
+                                        <td>{{annual_mark.subject_id.subject_name}}</td>
+                                        <td>{{annual_mark.obtained_marks}}</td>
+                                        <td>{{annual_mark.total_marks}}</td>
+                                    </tr> 
+                                    {% endif %}                                  
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock main_content %}

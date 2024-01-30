@@ -1,0 +1,46 @@
+{% extends 'staff_template/base_template.html' %}
+{% block page_title %}
+Notifications
+{% endblock page_title %}
+{% load static %}
+{% block main_content %}
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Notifications</h3>
+                    </div>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Messages</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            {% for notification in staff_notification %}
+                            <tr>
+                                <td>{{notification.id}}</td>
+                                <td>{{notification.message}}</td>
+                                <td>
+                                    {% if notification.notification_status == 0 %}
+                                        <a href="{% url 'view_notification_seen' notification.id %}" class="btn btn-success">Mark As Read</a>
+                                    {% else %}
+                                        <button class="btn btn-success" disabled>Seen</button>  
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock main_content %}
+

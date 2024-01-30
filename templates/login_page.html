@@ -1,0 +1,208 @@
+{% load static %}
+<!DOCTYPE html>
+<!-- Created By CodingNepal -->
+<html lang="en" dir="ltr">
+
+<head>
+   <meta charset="utf-8">
+   <title>Log In Page</title>
+   <!-- <title>Neumorphism Login Form UI | CodingNepal</title> -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+   <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+   <!-- Font Awesome -->
+   <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
+   <!-- Ionicons -->
+   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+   <!-- Tempusdominus Bootstrap 4 -->
+   <link rel="stylesheet" href="{% static 'plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
+   <!-- iCheck -->
+   <link rel="stylesheet" href="{% static 'plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+   <!-- JQVMap -->
+   <link rel="stylesheet" href="{% static 'plugins/jqvmap/jqvmap.min.css' %}">
+   <!-- Theme style -->
+   <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
+   <!-- overlayScrollbars -->
+   <link rel="stylesheet" href="{% static 'plugins/overlayScrollbars/css/OverlayScrollbars.min.css' %}">
+   <!-- Daterange picker -->
+   <link rel="stylesheet" href="{% static 'plugins/daterangepicker/daterangepicker.css' %}">
+   <!-- summernote -->
+   <link rel="stylesheet" href="{% static 'plugins/summernote/summernote-bs4.min.css' %}">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   <style>
+      * {
+         margin: 0;
+         padding: 0;
+         /* user-select: none; */
+         box-sizing: border-box;
+         font-family: 'Poppins', sans-serif;
+      }
+
+      html,
+      body {
+         height: 100%;
+      }
+
+      body {
+         display: grid;
+         place-items: center;
+         background: #dde1e7;
+         text-align: center;
+      }
+
+      .content {
+         width: 430px;
+         padding: 40px 30px;
+         background: #dde1e7;
+         border-radius: 10px;
+         box-shadow: -3px -3px 7px #ffffff73,
+            2px 2px 5px rgba(94, 104, 121, 0.288);
+      }
+
+      .content .text {
+         font-size: 33px;
+         font-weight: 600;
+         margin-bottom: 35px;
+         color: #595959;
+      }
+
+      .field {
+         height: 50px;
+         width: 100%;
+         display: flex;
+         position: relative;
+      }
+
+      .field:nth-child(2) {
+         margin-top: 20px;
+      }
+
+      .field input {
+         height: 100%;
+         width: 100%;
+         padding-left: 45px;
+         outline: none;
+         border: none;
+         font-size: 18px;
+         background: #dde1e7;
+         color: #595959;
+         border-radius: 25px;
+         box-shadow: inset 2px 2px 5px #BABECC,
+            inset -5px -5px 10px #ffffff73;
+      }
+
+      .field input:focus {
+         box-shadow: inset 1px 1px 2px #BABECC,
+            inset -1px -1px 2px #ffffff73;
+      }
+
+      .field span {
+         position: absolute;
+         color: #595959;
+         width: 50px;
+         line-height: 50px;
+      }
+
+      .field label {
+         position: absolute;
+         top: 50%;
+         transform: translateY(-50%);
+         left: 45px;
+         pointer-events: none;
+         color: #666666;
+      }
+
+      .field input:valid~label {
+         opacity: 0;
+      }
+
+      .forgot-pass {
+         text-align: left;
+         margin: 10px 0 10px 5px;
+      }
+
+      .forgot-pass a {
+         font-size: 16px;
+         color: #3498db;
+         text-decoration: none;
+      }
+
+      .forgot-pass:hover a {
+         text-decoration: underline;
+      }
+
+      button {
+         margin: 15px 0;
+         width: 100%;
+         height: 50px;
+         font-size: 18px;
+         line-height: 50px;
+         font-weight: 600;
+         background: #dde1e7;
+         border-radius: 25px;
+         border: none;
+         outline: none;
+         cursor: pointer;
+         color: #595959;
+         box-shadow: 2px 2px 5px #BABECC,
+            -5px -5px 10px #ffffff73;
+      }
+
+      button:focus {
+         color: #3498db;
+         box-shadow: inset 2px 2px 5px #BABECC,
+            inset -5px -5px 10px #ffffff73;
+      }
+
+      .sign-up {
+         margin: 10px 0;
+         color: #595959;
+         font-size: 16px;
+      }
+
+      .sign-up a {
+         color: #3498db;
+         text-decoration: none;
+      }
+
+      .sign-up a:hover {
+         text-decoration: underline;
+      }
+   </style>
+</head>
+
+<body>
+   <div class="content">
+      <div class="text">
+         Login Form
+         <hr>
+         Student Management
+      </div>
+      <form action="{% url 'do_login' %}" method="post">
+         {% csrf_token %}
+         <div class="field">
+            <input type="email" placeholder="Enter Your Email" name="email">
+            <span class="fas fa-user"></span>
+         </div>
+         <div class="field" style="margin-top: 25px;">
+            <input type="password" placeholder="Enter Your Password" name="password">
+            <span class="fas fa-lock"></span>
+         </div>
+         <div class="forgot-pass">
+            <a href="{% url 'password_reset' %}">Reset Password?</a>
+         </div>
+         <button type="submit">Sign In</button>
+         <div class="form-group" style="color: red;">
+            {% include 'messages.html' %}
+         </div>
+         <div class="sign-up">
+            Not a member?<br>
+            <a href="{% url 'signup_admin' %}">Sign Up For Admin</a><br>
+            <a href="{% url 'signup_staff' %}">Sign Up For Staff</a><br>
+            <a href="{% url 'signup_student' %}">Sign Up For Student</a>
+         </div>
+      </form>
+   </div>
+</body>
+
+</html>

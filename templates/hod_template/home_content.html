@@ -1,0 +1,507 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+Home
+{% endblock page_title %}
+{% load static %}
+{% block main_content %}
+<section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-3 col-6">
+          <!-- small box -->
+          <div class="small-box bg-info">
+            <div class="inner">
+              <h3>{{student}}</h3>
+
+              <p>Total Students</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-calendar-alt"></i>
+            </div>
+            <a href="{% url 'manage_student' %}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-6">
+          <!-- small box -->
+          <div class="small-box bg-success">
+            <div class="inner">
+              <h3>{{staff}}</h3>
+
+              <p>Total Staffs</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-calendar-alt"></i>
+            </div>
+            <a href="{% url 'manage_staff' %}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-6">
+          <!-- small box -->
+          <div class="small-box bg-warning">
+            <div class="inner">
+              <h3>{{course}}</h3>
+
+              <p>Total Courses</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-calendar-alt"></i>
+            </div>
+            <a href="{% url 'manage_course' %}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-6">
+          <!-- small box -->
+          <div class="small-box bg-danger">
+            <div class="inner">
+              <h3>{{subject}}</h3>
+
+              <p>Total Subjects</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-book-open"></i>
+            </div>
+            <a href="{% url 'manage_subject' %}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+          </div>
+        </div> 
+      </div>
+      <div class="row">
+        <div class="col-lg-6 col-6">
+          <div class="card card-success">
+            <div class="card-header">
+              <h3 class="card-title">Student And Staff Chart</h3>
+  
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="cl-lg-6 col-6">
+          <div class="card card-info">
+            <div class="card-header">
+              <h3 class="card-title">Subjects In Courses</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+            </div>
+            <!-- /.card-body -->
+          </div>
+        </div>
+        <div class="col-lg-6 col-6">
+          <div class="card card-warning">
+            <div class="card-header">
+              <h3 class="card-title">Students In Each Courses</h3>
+  
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <canvas id="pieChart2" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 col-6">
+          <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title">Students In Each Subject</h3>
+  
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <canvas id="pieChart3" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <div class="card card-secondary">
+            <div class="card-header">
+              <h3 class="card-title">Attendance Of Staffs</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart">
+                <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+              </div>
+            </div>
+            <!-- /.card-body -->
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <div class="card card-danger">
+            <div class="card-header">
+              <h3 class="card-title">Attendance of Students</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart">
+                <canvas id="barChart1" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+              </div>
+            </div>
+            <!-- /.card-body -->
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <div class="card card-danger">
+            <div class="card-header">
+              <h3 class="card-title">Student Result</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart">
+                <canvas id="barChart2" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+              </div>
+            </div>
+            <!-- /.card-body -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% endblock main_content %}
+
+{% block custom_js %}
+  <script>
+    $(document).ready(function(){
+      var pieData = {
+          labels: [
+              'STUDENT',
+              'STAFF',
+              'TOTAL MEMBERS',
+          ],
+          datasets: [
+            {
+              data: [{{student}},{{staff}},{{total_member}}],
+              backgroundColor : ['#008080','#FF5733','#3b8bba'],
+            }
+          ]
+        };
+
+        var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+        var pieOptions     = {
+          maintainAspectRatio : false,
+          responsive : true,
+        }
+        new Chart(pieChartCanvas, {
+          type: 'pie',
+          data: pieData,
+          options: pieOptions
+        });
+
+
+        var course_name_list = {{ course_name_list|safe }};
+        var students_count_in_course = {{ students_count_in_course }};
+        var pieData2 = {
+          labels: course_name_list,
+          datasets: [
+            {
+              data: students_count_in_course,
+              backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de','#FFFF00','#00FFFF','#008080'],
+            }
+          ]
+        };
+
+        var pieChartCanvas2 = $('#pieChart2').get(0).getContext('2d')
+        var pieOptions2     = {
+          maintainAspectRatio : false,
+          responsive : true,
+        }
+        new Chart(pieChartCanvas2, {
+          type: 'pie',
+          data: pieData2,
+          options: pieOptions2,
+        });
+
+        var course_name_list = {{ course_name_list|safe }};
+        var subjects_count_list = {{ subjects_count_list }};
+
+        var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
+        var donutData        = {
+          labels: course_name_list,
+          datasets: [
+            {
+              label: 'Subjects Available',
+              data: subjects_count_list,
+              backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de','#FFFF00','#00FFFF','#008080'],
+            }
+          ]
+        }
+        var donutOptions     = {
+          maintainAspectRatio : false,
+          responsive : true,
+        }
+        //Create pie or douhnut chart
+        // You can switch between pie and douhnut using the method below.
+        new Chart(donutChartCanvas, {
+          type: 'doughnut',
+          data: donutData,
+          options: donutOptions
+        })
+
+        var subject_name_list = {{ subject_name_list|safe }};
+        var students_count_in_subjct = {{ students_count_in_subjct }};
+
+        var donutChartCanvas2 = $('#pieChart3').get(0).getContext('2d')
+        var donutData2 = {
+          labels: subject_name_list,
+          datasets: [
+            {
+              label: 'Student Exists',
+              data: students_count_in_subjct,
+              backgroundColor : ['#f56954', '#00a65a', '#f39c12','#33FFBD','#33FF57','#00c0ef', '#3c8dbc', '#d2d6de','#9B59B6','#EDBB99','#FFFF00','#273746','#00FFFF','#008080'],
+            }
+          ]
+        }
+        var donutOptions2 = {
+          maintainAspectRatio : false,
+          responsive : true,
+        }
+        //Create pie or douhnut chart
+        // You can switch between pie and douhnut using the method below.
+        new Chart(donutChartCanvas2, {
+          type: 'doughnut',
+          data: donutData2,
+          options: donutOptions2
+        })
+
+        var staff_name_list = {{ staff_name_list|safe }}
+        var staff_attendance_present = {{ staff_attendance_present }}
+        var staff_attendance_absent = {{ staff_attendance_absent }}
+
+        var areaChartData = {
+          
+          labels  : staff_name_list,
+          datasets: [
+            {
+              label               : 'Total Present',
+              backgroundColor     : 'rgba(60,141,188,0.9)',
+              borderColor         : 'rgba(60,141,188,0.8)',
+              pointRadius          : false,
+              pointColor          : '#3b8bba',
+              pointStrokeColor    : 'rgba(60,141,188,1)',
+              pointHighlightFill  : '#fff',
+              pointHighlightStroke: 'rgba(60,141,188,1)',
+              data                : staff_attendance_present
+            },
+            {
+              label               : 'Total Absent',
+              backgroundColor     : 'rgb(255, 0, 0)',
+              borderColor         : 'rgba(210, 214, 222, 1)',
+              pointRadius         : false,
+              pointColor          : 'rgba(210, 214, 222, 1)',
+              pointStrokeColor    : '#c1c7d1',
+              pointHighlightFill  : '#fff',
+              pointHighlightStroke: 'rgba(220,220,220,1)',
+              data                : staff_attendance_absent
+            },
+          ]
+        }
+
+
+
+        var barChartCanvas = $('#barChart').get(0).getContext('2d')
+        var barChartData = $.extend(true, {}, areaChartData)
+        var temp0 = areaChartData.datasets[0]
+        var temp1 = areaChartData.datasets[1]
+        barChartData.datasets[0] = temp1
+        barChartData.datasets[1] = temp0
+
+        var barChartOptions = {
+          responsive              : true,
+          maintainAspectRatio     : false,
+          datasetFill             : false
+        }
+
+        new Chart(barChartCanvas, {
+          type: 'bar',
+          data: barChartData,
+          options: barChartOptions
+        })
+
+
+
+        var student_list = {{ student_list|safe }}
+        var student_present_list = {{ student_present_list }}
+        var student_absent_list = {{ student_absent_list }}
+
+        var areaChartData1 = {
+          
+          labels  : student_list,
+          datasets: [
+            {
+              label               : 'Total Present',
+              backgroundColor     : 'rgba(60,141,188,0.9)',
+              borderColor         : 'rgba(60,141,188,0.8)',
+              pointRadius          : false,
+              pointColor          : '#3b8bba',
+              pointStrokeColor    : 'rgba(60,141,188,1)',
+              pointHighlightFill  : '#fff',
+              pointHighlightStroke: 'rgba(60,141,188,1)',
+              data                : student_present_list
+            },
+            {
+              label               : 'Total Absent',
+              backgroundColor     : 'rgb(255, 0, 0)',
+              borderColor         : 'rgba(210, 214, 222, 1)',
+              pointRadius         : false,
+              pointColor          : 'rgba(210, 214, 222, 1)',
+              pointStrokeColor    : '#c1c7d1',
+              pointHighlightFill  : '#fff',
+              pointHighlightStroke: 'rgba(220,220,220,1)',
+              data                : student_absent_list
+            },
+          ]
+        }
+
+
+
+        var barChartCanvas1 = $('#barChart1').get(0).getContext('2d')
+        var barChartData1 = $.extend(true, {}, areaChartData1)
+        var temp0 = areaChartData1.datasets[0]
+        var temp1 = areaChartData1.datasets[1]
+        barChartData1.datasets[0] = temp1
+        barChartData1.datasets[1] = temp0
+
+        var barChartOptions1 = {
+          responsive              : true,
+          maintainAspectRatio     : false,
+          datasetFill             : false
+        }
+
+        new Chart(barChartCanvas1, {
+          type: 'bar',
+          data: barChartData1,
+          options: barChartOptions1
+        })
+
+
+        var quater_total_indivisual_results = {{ quater_total_indivisual_results }};
+        var quater_total_mark = {{ quater_total_mark }};
+        var quaterly_student_names = {{ quaterly_student_names|safe }};
+        var annual_total_indivisual_results = {{ annual_total_indivisual_results }};
+        var annual_total_mark = {{ annual_total_mark }};
+        var annually_student_names = {{ annually_student_names|safe }};
+        var halfyearly_total_indivisual_results = {{ halfyearly_total_indivisual_results }};
+        var halfyearly_total_mark = {{ halfyearly_total_mark }};
+        var halfyearly_student_names = {{ halfyearly_student_names|safe }};
+
+        var areaChartData2 = {
+          labels  : quaterly_student_names,
+          datasets: [
+            {
+              label               : 'Quaterly Exams',
+              backgroundColor     : 'rgba(60,141,188,0.9)',
+              borderColor         : 'rgba(60,141,188,0.8)',
+              pointRadius          : false,
+              pointColor          : '#3b8bba',
+              pointStrokeColor    : 'rgba(60,141,188,1)',
+              pointHighlightFill  : '#fff',
+              pointHighlightStroke: 'rgba(60,141,188,1)',
+              data                : quater_total_indivisual_results,
+            },
+            {
+              label               : 'Halfyearly Exam',
+              backgroundColor     : 'rgb(255, 0, 0)',
+              borderColor         : 'rgba(210, 214, 222, 1)',
+              pointRadius         : false,
+              pointColor          : 'rgba(210, 214, 222, 1)',
+              pointStrokeColor    : '#c1c7d1',
+              pointHighlightFill  : '#fff',
+              pointHighlightStroke: 'rgba(220,220,220,1)',
+              data                : halfyearly_total_indivisual_results,
+            },
+            {
+              label               : 'Annual Exam',
+              backgroundColor     : 'rgb(0, 128, 128)',
+              borderColor         : 'rgba(60,141,188,0.8)',
+              pointRadius          : false,
+              pointColor          : '#3b8bba',
+              pointStrokeColor    : 'rgba(60,141,188,1)',
+              pointHighlightFill  : '#fff',
+              pointHighlightStroke: 'rgba(60,141,188,1)',
+              data                : annual_total_indivisual_results,
+            },
+          ]
+        };
+
+
+
+        var barChartCanvas2 = $('#barChart2').get(0).getContext('2d')
+        var barChartData2 = $.extend(true, {}, areaChartData2)
+        var temp0 = areaChartData2.datasets[0]
+        var temp1 = areaChartData2.datasets[1]
+        var temp2 = areaChartData2.datasets[2]
+        barChartData2.datasets[0] = temp0
+        barChartData2.datasets[1] = temp1
+        barChartData2.datasets[2] = temp2
+
+        var barChartOptions2 = {
+          responsive              : true,
+          maintainAspectRatio     : false,
+          datasetFill             : false
+        }
+
+        new Chart(barChartCanvas2, {
+          type: 'bar',
+          data: barChartData2,
+          options: barChartOptions2
+        })
+    });
+  </script>
+{% endblock custom_js %}

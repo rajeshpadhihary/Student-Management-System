@@ -1,0 +1,106 @@
+{% extends 'staff_template/base_template.html' %}
+{% block page_title %}
+Add Result
+{% endblock page_title %}
+{% load static %}
+{% block main_content %}
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <form action="{% url 'result_save' %}" method="post">
+                    {% csrf_token %}
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Add Result</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Subject</label>
+                                <select name="subject" id="subject" class="form-control">
+                                    {% for subject in subjects %}
+                                    <option value="{{subject.id}}">{{subject.subject_name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Session Year</label>
+                                <select name="session_year" id="session_year" class="form-control">
+                                    {% for session_year in session_years %}
+                                    <option value="{{session_year.id}}">{{session_year.session_start_year}}&nbsp; TO
+                                        &nbsp;{{session_year.session_end_year}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Exam Type</label>
+                                <select name="exam_type" id="exam_type" class="form-control">
+                                    <option value="quaterly_exam">Quaterly Exam</option>
+                                    <option value="halfyearly_exam">Halfyearly Exam</option>
+                                    <option value="annual_exam">Annual Exam</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                {% include 'messages.html' %}
+                            </div>
+
+                            <div class="card-footer">
+                                <button type="button" class="btn btn-primary btn-block" id="fetch_student">FetchStudent</button>
+                            </div>
+                            <div id="student_data" class="card-footer">
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+</section>
+{% endblock main_content %}
+
+{% block custom_js %}
+<script>
+    $(document).ready(function () {
+        $('#fetch_student').click(function () {
+            var subject = $("#subject").val();
+            var session_year = $("#session_year").val();
+
+            $.ajax({
+                url: "{% url 'get_students' %}",
+                type: "POST",
+                data: {
+                    'subject': subject,
+                    'session_year': session_year,
+                }
+            })
+            .done(function (response) {
+                var json_data = JSON.parse(response);
+                    console.log(json_data)
+                    var div_data = "<div class='form-group'><label>Student List</label><select class='student_list form-control' name='student_list'>";
+                    for (key in json_data) {
+                        div_data += "<option value='" + json_data[key]['id'] + "'>ID : "+ json_data[key]['id'] + " : " + json_data[key]['name']+"</option>"
+                    }
+                    div_data += "</select>";
+                    div_data += "</div>";
+                    div_data += "<div class='form-group'><div class='row'>";
+                    div_data += "<div class='col-lg-6'>";
+                    div_data += "<label> Subject Marks : </label><input type='text' name='subject_marks' class='form-control' placeholder='Mark Secure..'>";
+                    div_data += "</div>"
+                    div_data += "<div class='col-lg-6'>";
+                    div_data += "<label> Out Of : </label><input type='text' name='out_of' class='form-control' placeholder='Out Of ..'>";
+                    div_data += "</div>";
+                    div_data += "</div></div>";
+                    div_data += "<div class='form-group'>"
+                    div_data += "<button id='save_attendance' class='btn btn-success btn-block' type='submit'>Save Result</button>";
+                    div_data += "</div>";
+
+
+                    $("#student_data").html(div_data)
+                })
+                .fail(function () {
+                    alert("Error in fetching Students");
+                })
+            })
+    })
+</script>
+{% endblock custom_js %}
